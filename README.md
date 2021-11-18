@@ -2,15 +2,5 @@
 
 
 <h1>Sobre este projeto</h1>
-- Este Projeto/exercício foi criado utilizando o Framework Laravel através do ambiente de desenvolvimento Laragon.
+- Este Projeto/exercício foi criado utilizando o Framework Laravel através do ambiente de desenvolvimento Laragon.<p>
 - O intuito deste exercício é criar uma API de livros que será consumida através de outro projeto criado em Flutter.
-
-#### Este projeto/exercício ainda está em desenvolvimento.
-- Em breve irei inserir uma documentação para utilização desta API
-
-* Etapas já concluídas:
-    * criado as tabelas items, authors
-    * Inserido autenticação através do Laravel Sanctum 
-
-* Falta implementar:
-    * Tabela de categorias para os livros
