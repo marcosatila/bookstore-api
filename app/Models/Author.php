@@ -10,17 +10,19 @@ class Author extends Model
     use HasFactory;
 
     protected $fillable = [
+
         'name_author'
     ];
 
     protected $hidden = [
+        'author_id',
         'created_at',
         'updated_at',
     ];
 
-    public function item()
+    public function book()
     {
-       return $this->hasMany(Item::class);
+       return $this->hasMany(Book::class);
     }
 
     public function publisher()

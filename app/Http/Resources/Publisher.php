@@ -16,7 +16,7 @@ class Publisher extends JsonResource
      */
     public function toArray($request)
     {
-//         return parent::toArray($request);
-        return Item::collection($this->item);
+//        return parent::toArray($request);
+        return Book::collection($this->book);
     }
 }

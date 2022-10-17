@@ -11,18 +11,19 @@ class Publisher extends Model
 
 //    protected $primaryKey = 'publisher_id';
     protected $fillable = [
-        'id',
+
         'name_publisher'
     ];
 
     protected $hidden = [
+        'publisher_id',
         'created_at',
         'updated_at'
     ];
 
-    public function item()
+    public function book()
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(Book::class);
     }
 
     public function author()

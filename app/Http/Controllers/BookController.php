@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ItemRequest;
+use App\Http\Requests\BookRequest;
 use App\Models\Author;
-use App\Models\Item;
+use App\Models\Book;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
-use App\Http\Resources\Item as ItemResource;
+use App\Http\Resources\Book as BookResource;
 
-class ItemController extends Controller
+class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    //Pesquisa por todos os items na tabela
+    //Pesquisa por todos os books na tabela
     public function index()
     {
-        $books = Item::all();
-        return ItemResource::collection($books);
+        $books = Book::all();
+        return BookResource::collection($books);
+        return view('index', compact('books'));
     }
 
     /**
@@ -30,7 +31,7 @@ class ItemController extends Controller
      * @return string
      */
     //Se não encontrar estes dados na tabela, ambos serão criados juntos.
-    public function store(ItemRequest $request)
+    public function store(BookRequest $request)
     {
         //SE NÃO ENCONTRAR O AUTOR NA TABELA, SERÁ CRIADO
         $authors = Author::firstOrNew(
@@ -48,8 +49,8 @@ class ItemController extends Controller
         $publisher->save();
         $publisher_id = $publisher->id;
 
-        //SE NÃO ENCONTRAR O ITEM NA TABELA, SERÁ CRIADO, VAI CAPTURAR O ID DO AUTOR E DA EDITORA
-        $books = Item::FirstOrNew(
+        //SE NÃO ENCONTRAR O BOOK NA TABELA, SERÁ CRIADO, VAI CAPTURAR O ID DO AUTOR E DA EDITORA
+        $books = Book::FirstOrNew(
             ['name_product' => request('name_product')]
         );
         $books->name_product = request('name_product');
@@ -65,14 +66,14 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Item $item
-     * @return ItemResource
+     * @param \App\Models\Book $book
+     * @return BookResource
      */
-    //Realiza a pesquisa pelo id do item
+    //Realiza a pesquisa pelo id do book
     public function show($id)
     {
-        $books = Item::findOrFail($id);
-        return new ItemResource($books);
+        $books = Book::findOrFail($id);
+        return new BookResource($books);
     }
 
     /**
@@ -80,18 +81,32 @@ class ItemController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * //     * @param \App\Models\Item $item
+     * //     * @param \App\Models\Book $book
      * @return string
      */
     //Realiza o update dos dados
-    public function update(ItemRequest $request, $id)
+    public function update(BookRequest $request, $id)
     {
-        $books = Item::findOrFail($id);
+        $authors = Author::findOrFail($id);
+        $authors->name_author = $request->input('name_author');
+        $authors->update();
+        $author_id = $authors->id;
+
+
+        $publishers = Publisher::findOrFail($id);
+        $publishers->name_publisher = $request->input('name_publisher');
+        $publishers->update();
+        $publishers_id = $publishers->id;
+
+
+        $books = Book::findOrFail($id);
         $books->name_product = $request->input('name_product');
         $books->price = $request->input('price');
         $books->pages = $request->input('pages');
+        $books->author_id = $author_id;
+        $books->publisher_id = $publishers_id;
 
-        if ($books->save()) {
+        if ($books->update()) {
             return 'Dados atualizados com sucesso!';
         }
     }
@@ -99,13 +114,13 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Item $item
+     * @param \App\Models\Book $book
      * @return string
      */
     //Deleta os dados da tabela
     public function destroy($id)
     {
-        $books = Item::findOrFail($id);
+        $books = Book::findOrFail($id);
         if ($books->delete()) {
             return 'Dados removidos com sucesso!';
         }
@@ -114,8 +129,8 @@ class ItemController extends Controller
     //Filtra os dados pelo nome do produto
     public function search($name_product)
     {
-        $books = Item::where('name_product', 'like', '%' . $name_product . '%')->get();
-        return ItemResource::collection($books);
+        $books = Book::where('name_product', 'like', '%' . $name_product . '%')->get();
+        return BookResource::collection($books);
     }
 
 

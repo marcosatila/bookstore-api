@@ -45,7 +45,7 @@ class AuthController extends Controller
         //Check email
         $user = User::where('email', $fields['email'])->first();
 
-        //Check passord
+        //Check password
         if (!$user || !Hash::check($fields['password'], $user->password)){
             return response([
                'message'=> 'E-mail ou senha estão incorretos'

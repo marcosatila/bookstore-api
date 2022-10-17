@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
@@ -16,13 +17,19 @@ class Author extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     * @return array|Arrayable|JsonSerializable
+     * @return AnonymousResourceCollection
      */
     public function toArray($request)
     {
 //        return parent::toArray($request);
 
-        return Item::collection($this->item);
+        return Book::collection($this->book);
+
+//        return [
+//            'authors' => [
+//                'name_author' => $this->name_author,
+//            ],
+//        ];
 
     }
 }
